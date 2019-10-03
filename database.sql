@@ -1,42 +1,35 @@
 create table users(
-	userId text,
+	userId integer,
 	userName text unique,
 	password text,
 	address text,
 	phoneNumber text,
 	userState integer,
+	permission integer,
 	primary key(userId)
 );
 
 create table goods(
-	goodsId text,
+	goodsId integer,
 	goodsName text,
 	price real,
 	picture text,
 	category text,
-	description text,  
+	description text,
 	goodsState integer,
-	sellTime text,
-	userId text,
+	postTime text,
+	userId integer,
 	primary key (goodsId),
 	foreign key (userId) references users
 );
-	
+
 create table orders(
-	orderId text,
+	orderId integer,
 	orderState integer,
 	generateTime text,
-	userId text,
-	goodsId text,
+	userId integer,
+	goodsId integer,
 	primary key (orderId),
 	foreign key (userId) references users,
 	foreign key (goodsId) references goods
 );
-
-create table admin(
-	adminId text,
-	adminName text unique,
-	password text,
-	primary key(adminId)
-);
-	
