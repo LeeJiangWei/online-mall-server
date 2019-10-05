@@ -71,6 +71,34 @@ class User {
                 }
             });
     }
+
+    static haveGoods(userId, goodsId, callback) {
+        db('goods')
+            .select(userId)
+            .where('userId', userId)
+            .andWhere('goodsId', goodsId)
+            .asCallback((error, data) => {
+                if (data[0]) {
+                    callback(true);
+                } else {
+                    callback(false);
+                }
+            });
+    }
+
+    static haveOrder(userId, orderId, callback) {
+        db('orders')
+            .select(userId)
+            .where('userId', userId)
+            .andWhere('orderId', orderId)
+            .asCallback((error, data) => {
+                if (data[0]) {
+                    callback(true);
+                } else {
+                    callback(false);
+                }
+            });
+    }
 }
 
 module.exports.User = User;

@@ -109,21 +109,27 @@ router.post('/:userId', checkLogin, function(req, res, next) {
         phoneNumber: req.body.phoneNumber,
         userState: req.body.userState
     };
-    const isAdmin = req.session.user.userState === 5;
-    const isItself = parseInt(userId) === req.session.user.userId;
-    if (!isAdmin && !isItself) {
-        res.json({
-            message: 'Permission denied.'
-        });
-    } else {
-        delete user.userId;
-        if (!isAdmin) {
-            delete user.userState;
-        }
-        User.updateById(userId, user, message => {
+    if (user.userName && user.password) {
+        const isAdmin = req.session.user.userState === 5;
+        const isItself = parseInt(userId) === req.session.user.userId;
+        if (!isAdmin && !isItself) {
             res.json({
-                message: message
+                message: 'Permission denied.'
             });
+        } else {
+            delete user.userId;
+            if (!isAdmin) {
+                delete user.userState;
+            }
+            User.updateById(userId, user, message => {
+                res.json({
+                    message: message
+                });
+            });
+        }
+    } else {
+        res.json({
+            message: 'Invalid parameters.'
         });
     }
 });

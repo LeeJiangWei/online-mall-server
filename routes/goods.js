@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Goods = require('../models/goods').Goods;
+const User = require('../models/user').User;
 const checkLogin = require('../middlewares/check').checkLogin;
 
 router.get('/', function(req, res, next) {
@@ -58,6 +59,7 @@ router.get('/:goodsId', function(req, res, next) {
 
 router.post('/:goodsId', checkLogin, function(req, res, next) {
     const goodsId = req.params.goodsId;
+    const userId = req.session.user.userId;
     let goods = {
         goodsName: req.body.goodsName,
         price: req.body.price,
@@ -66,20 +68,27 @@ router.post('/:goodsId', checkLogin, function(req, res, next) {
         description: req.body.description,
         goodsState: req.body.goodsState
     };
-    const isAdmin = req.session.user.userState === 5;
-    const isItself = parseInt(req.body.userId) === req.session.user.userId;
-    if (!isAdmin && !isItself) {
-        res.json({
-            message: 'Permission denied.'
+    if (goods.goodsName && goods.price) {
+        const isAdmin = req.session.user.userState === 5;
+        User.haveGoods(userId, goodsId, yes => {
+            if (isAdmin || yes) {
+                if (!isAdmin) {
+                    delete goods.goodsState;
+                }
+                Goods.updateById(goodsId, goods, message => {
+                    res.json({
+                        message: message
+                    });
+                });
+            } else {
+                res.json({
+                    message: 'Permission denied.'
+                });
+            }
         });
     } else {
-        if (!isAdmin) {
-            delete goods.goodsState;
-        }
-        Goods.updateById(goodsId, goods, message => {
-            res.json({
-                message: message
-            });
+        res.json({
+            message: 'Invalid parameters.'
         });
     }
 });

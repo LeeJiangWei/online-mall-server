@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Order = require('../models/order').Order;
+const User = require('../models/user').User;
 const checkLogin = require('../middlewares/check').checkLogin;
 
 router.get('/', function(req, res, next) {
@@ -38,32 +39,50 @@ router.post('/add', checkLogin, function(req, res, next) {
     }
 });
 
-router.get('/:orderId', function(req, res, next) {
+router.get('/:orderId', checkLogin, function(req, res, next) {
     const orderId = req.params.orderId;
-    Order.getById(orderId, (order, message) => {
-        res.json({
-            order: order,
-            message: message
-        });
+    const userId = req.session.user.userId;
+    const isAdmin = req.session.user.userState === 5;
+    User.haveOrder(userId, orderId, yes => {
+        if (isAdmin || yes) {
+            Order.getById(orderId, (order, message) => {
+                res.json({
+                    order: order,
+                    message: message
+                });
+            });
+        } else {
+            res.json({
+                message: 'Permission denied.'
+            });
+        }
     });
 });
 
 router.post('/:orderId', checkLogin, function(req, res, next) {
     const orderId = req.params.orderId;
+    const userId = req.session.user.userId;
     let order = {
         orderState: req.body.orderState
     };
-    const isAdmin = req.session.user.userState === 5;
-    const isItself = parseInt(req.body.userId) === req.session.user.userId;
-    if (!isAdmin && !isItself) {
-        res.json({
-            message: 'Permission denied.'
+    if (order.orderState) {
+        const isAdmin = req.session.user.userState === 5;
+        User.haveOrder(userId, orderId, yes => {
+            if (isAdmin || yes) {
+                Order.updateById(orderId, order, message => {
+                    res.json({
+                        message: message
+                    });
+                });
+            } else {
+                res.json({
+                    message: 'Permission denied.'
+                });
+            }
         });
     } else {
-        Order.updateById(orderId, order, message => {
-            res.json({
-                message: message
-            });
+        res.json({
+            message: 'Invalid parameters.'
         });
     }
 });
