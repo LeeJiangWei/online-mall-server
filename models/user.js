@@ -21,7 +21,7 @@ class User {
                 if (error) {
                     message = error.message;
                 }
-                callback(user, message);
+                callback(user[0], message);
             });
     }
 
