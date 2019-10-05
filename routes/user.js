@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../models/user').User;
 
 router.get('/', function(req, res, next) {
-    res.json('');
+    User.all(users => {
+        res.json(users);
+    });
 });
 
 router.get('/:userId', function(req, res, next) {
