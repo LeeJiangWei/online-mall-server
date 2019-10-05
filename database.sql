@@ -5,7 +5,6 @@ create table if not exists users(
 	address text,
 	phoneNumber text,
 	userState integer,
-	permission integer,
 	primary key(userId)
 );
 

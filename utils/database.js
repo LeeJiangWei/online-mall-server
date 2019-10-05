@@ -1,4 +1,6 @@
 const knex = require('knex');
+const sqlite3 = require('sqlite3').verbose();
+const sqlite3Db = new sqlite3.Database('data.db');
 const fs = require('fs');
 
 const db = knex({
@@ -11,14 +13,13 @@ const db = knex({
 
 function init() {
     const sql = fs.readFileSync('./database.sql').toString();
-    db.schema.raw(sql).then(
-        value => {
-            console.log('Database initialization completed.');
-        },
-        reason => {
-            console.error(reason);
+    sqlite3Db.exec(sql, error => {
+        if (!error) {
+            console.log('Database initialization succeeded.');
+        } else {
+            console.error(error.message);
         }
-    );
+    });
 }
 
 module.exports = {

@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const Goods = require('../models/goods').Goods;
 
 router.get('/', function(req, res, next) {
-    res.json({
-        a: 'as',
-        b: 'bs'
+    Goods.all(goods => {
+        res.json(goods);
     });
 });
 
