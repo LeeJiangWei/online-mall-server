@@ -49,6 +49,19 @@ class Goods {
                 }
             });
     }
+
+    static belongToUser(userId, callback) {
+        db('goods')
+            .select()
+            .where('userId', userId)
+            .asCallback((error, goods) => {
+                if (error) {
+                    throw error;
+                } else {
+                    callback(goods);
+                }
+            });
+    }
 }
 
 module.exports.Goods = Goods;

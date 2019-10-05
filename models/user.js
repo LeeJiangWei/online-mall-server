@@ -62,8 +62,8 @@ class User {
                     callback(false, error.message, undefined);
                 } else {
                     let message = 'success';
-                    if (userState) {
-                        callback(true, message, userState);
+                    if (userState[0]) {
+                        callback(true, message, userState[0]);
                     } else {
                         message = 'Invalid credentials.';
                         callback(false, message, undefined);

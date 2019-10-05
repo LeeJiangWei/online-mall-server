@@ -49,6 +49,19 @@ class Order {
                 }
             });
     }
+
+    static belongToUser(userId, callback) {
+        db('orders')
+            .select()
+            .where('userId', userId)
+            .asCallback((error, orders) => {
+                if (error) {
+                    throw error;
+                } else {
+                    callback(orders);
+                }
+            });
+    }
 }
 
 module.exports.Order = Order;
