@@ -1,4 +1,4 @@
-create table users(
+create table if not exists users(
 	userId integer,
 	userName text unique,
 	password text,
@@ -9,7 +9,7 @@ create table users(
 	primary key(userId)
 );
 
-create table goods(
+create table if not exists goods(
 	goodsId integer,
 	goodsName text,
 	price real,
@@ -23,7 +23,7 @@ create table goods(
 	foreign key (userId) references users
 );
 
-create table orders(
+create table if not exists orders(
 	orderId integer,
 	orderState integer,
 	generateTime text,
