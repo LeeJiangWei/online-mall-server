@@ -80,7 +80,8 @@ POST:/login {
         password:string
     },
     response {
-        message:string
+        message:string,
+        userState:number
     }
 }
 

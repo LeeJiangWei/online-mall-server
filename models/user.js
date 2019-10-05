@@ -1,65 +1,72 @@
 const db = require('../utils/database').db;
-const usersTable = db('users');
 
 class User {
     static all(callback) {
-        usersTable.select().asCallback((error, users) => {
-            if (error) {
-                throw error;
-            } else {
-                callback(users);
-            }
-        });
+        db('users')
+            .select()
+            .asCallback((error, users) => {
+                let message = 'success';
+                if (error) {
+                    message = error.message;
+                }
+                callback(users, message);
+            });
     }
 
     static getById(id, callback) {
-        usersTable.where('userId', id).asCallback((error, user) => {
-            if (error) {
-                throw error;
-            } else {
-                callback(user);
-            }
-        });
+        db('users')
+            .where('userId', id)
+            .asCallback((error, user) => {
+                let message = 'success';
+                if (error) {
+                    message = error.message;
+                }
+                callback(user, message);
+            });
     }
 
     static updateById(id, user, callback) {
-        usersTable
+        db('users')
             .where('userId', id)
             .update(user)
             .asCallback(error => {
                 if (error) {
-                    throw error;
+                    callback(error.message);
                 } else {
-                    callback();
+                    callback('success');
                 }
             });
     }
 
     static register(user, callback) {
-        usersTable.insert(user).asCallback(error => {
-            if (error) {
-                throw error;
-            } else {
-                callback();
-            }
-        });
+        db('users')
+            .insert(user)
+            .asCallback(error => {
+                if (error) {
+                    callback(error.message);
+                } else {
+                    callback('success');
+                }
+            });
     }
 
     static check(userName, password, callback) {
-        usersTable
-            .select('userId')
+        db('users')
+            .select('userState')
             .where({
                 userName: userName,
                 password: password
             })
-            .asCallback((error, userId) => {
+            .asCallback((error, userState) => {
                 if (error) {
-                    throw error;
+                    callback(false, error.message, undefined);
                 } else {
-                    if (userId) {
-                        callback(true);
+                    let message = 'success';
+                    if (userState) {
+                        callback(true, message, userState);
                     } else {
-                        callback(false);
+                        message = 'Invalid credentials.';
+                        callback(false, message, undefined);
                     }
                 }
             });

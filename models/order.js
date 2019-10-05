@@ -1,29 +1,32 @@
 const db = require('../utils/database').db;
-const ordersTable = db('orders');
 
 class Order {
     static all(callback) {
-        ordersTable.select().asCallback((error, orders) => {
-            if (error) {
-                throw error;
-            } else {
-                callback(orders);
-            }
-        });
+        db('orders')
+            .select()
+            .asCallback((error, orders) => {
+                if (error) {
+                    throw error;
+                } else {
+                    callback(orders);
+                }
+            });
     }
 
     static getById(id, callback) {
-        ordersTable.where('orderId', id).asCallback((error, order) => {
-            if (error) {
-                throw error;
-            } else {
-                callback(order);
-            }
-        });
+        db('orders')
+            .where('orderId', id)
+            .asCallback((error, order) => {
+                if (error) {
+                    throw error;
+                } else {
+                    callback(order);
+                }
+            });
     }
 
     static updateById(id, order, callback) {
-        ordersTable
+        db('orders')
             .where('orderId', id)
             .update(order)
             .asCallback(error => {
@@ -36,13 +39,15 @@ class Order {
     }
 
     static add(order, callback) {
-        ordersTable.insert(order).asCallback(error => {
-            if (error) {
-                throw error;
-            } else {
-                callback();
-            }
-        });
+        db('orders')
+            .insert(order)
+            .asCallback(error => {
+                if (error) {
+                    throw error;
+                } else {
+                    callback();
+                }
+            });
     }
 }
 
