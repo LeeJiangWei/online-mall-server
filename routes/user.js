@@ -15,14 +15,26 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
-    let user = req.body.user;
-    if (user && user.userName && user.password) {
-        user.userState = 1;
-        User.register(user, message => {
-            res.json({
-                message: message
-            });
-        });
+    const userName = req.body.userName;
+    const password = req.body.password;
+    const address = req.body.address;
+    const phoneNumber = req.body.phoneNumber;
+    if (userName && password) {
+        const userState = 1;
+        User.register(
+            {
+                userName: userName,
+                password: password,
+                address: address,
+                phoneNumber: phoneNumber,
+                userState: userState
+            },
+            message => {
+                res.json({
+                    message: message
+                });
+            }
+        );
     } else {
         res.json({
             message: 'Invalid parameters.'
@@ -33,14 +45,11 @@ router.post('/register', function(req, res, next) {
 router.post('/login', function(req, res, next) {
     const userName = req.body.userName;
     const password = req.body.password;
-    User.check(userName, password, (valid, message, userState) => {
+    User.check(userName, password, (valid, message, user) => {
         if (valid) {
-            req.session.user = {
-                userName: userName,
-                userState: userState
-            };
+            req.session.user = user;
             res.json({
-                userState: userState,
+                userState: user.userState,
                 message: message
             });
         } else {
@@ -77,17 +86,22 @@ router.get('/:userId', function(req, res, next) {
 
 router.post('/:userId', checkLogin, function(req, res, next) {
     const userId = req.params.userId;
-    let user = req.body.user;
-    if (
-        req.session.user.userState !== 5 &&
-        user.userName !== req.session.user.userName
-    ) {
+    let user = {
+        userName: req.body.userName,
+        password: req.body.password,
+        address: req.body.address,
+        phoneNumber: req.body.phoneNumber,
+        userState: req.body.userState
+    };
+    const isAdmin = req.session.user.userState === 5;
+    const isItself = parseInt(userId) === req.session.user.userId;
+    if (!isAdmin && !isItself) {
         res.json({
             message: 'Permission denied.'
         });
     } else {
-        if (req.session.user.userState !== 5) {
-            delete user.id;
+        delete user.userId;
+        if (!isAdmin) {
             delete user.userState;
         }
         User.updateById(userId, user, message => {

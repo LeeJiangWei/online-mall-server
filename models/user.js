@@ -52,18 +52,18 @@ class User {
 
     static check(userName, password, callback) {
         db('users')
-            .select('userState')
+            .select()
             .where({
                 userName: userName,
                 password: password
             })
-            .asCallback((error, userState) => {
+            .asCallback((error, data) => {
                 if (error) {
                     callback(false, error.message, undefined);
                 } else {
                     let message = 'success';
-                    if (userState[0]) {
-                        callback(true, message, userState[0]);
+                    if (data[0]) {
+                        callback(true, message, data[0]);
                     } else {
                         message = 'Invalid credentials.';
                         callback(false, message, undefined);
