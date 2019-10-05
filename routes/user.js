@@ -4,8 +4,9 @@ const User = require('../models/user').User;
 const Order = require('../models/order').Order;
 const Goods = require('../models/goods').Goods;
 const checkLogin = require('../middlewares/check').checkLogin;
+const checkAdmin = require('../middlewares/check').checkAdmin;
 
-router.get('/', function(req, res, next) {
+router.get('/', checkAdmin, function(req, res, next) {
     User.all((users, message) => {
         res.json({
             message: message,
@@ -65,6 +66,12 @@ router.get('/logout', function(req, res, next) {
     req.session.user = undefined;
     res.json({
         message: 'Logout successfully.'
+    });
+});
+
+router.get('/status', function(req, res, next) {
+    res.json({
+        user: req.session.user
     });
 });
 

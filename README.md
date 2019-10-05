@@ -91,6 +91,12 @@ GET:/logout {
         message:string
     }
 }
+
+Get:/status {
+    response {
+        user:obj
+    }
+}
 ```
 
 ### /goods
