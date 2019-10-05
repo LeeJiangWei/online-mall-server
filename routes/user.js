@@ -75,20 +75,29 @@ router.get('/status', function(req, res, next) {
     });
 });
 
-router.get('/:userId', function(req, res, next) {
+router.get('/:userId', checkLogin, function(req, res, next) {
     const userId = req.params.userId;
-    User.getById(userId, (user, message) => {
-        Goods.belongToUser(userId, goods => {
-            Order.belongToUser(userId, orders => {
-                res.json({
-                    message: message,
-                    user: user,
-                    goods: goods,
-                    orders: orders
+    const isAdmin = req.session.user.userState === 5;
+    const isItself = parseInt(userId) === req.session.user.userId;
+
+    if (isItself || isAdmin) {
+        User.getById(userId, (user, message) => {
+            Goods.belongToUser(userId, goods => {
+                Order.belongToUser(userId, orders => {
+                    res.json({
+                        message: message,
+                        user: user,
+                        goods: goods,
+                        orders: orders
+                    });
                 });
             });
         });
-    });
+    } else {
+        res.json({
+            message: 'Permission denied.'
+        });
+    }
 });
 
 router.post('/:userId', checkLogin, function(req, res, next) {
