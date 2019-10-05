@@ -51,11 +51,13 @@ GET:/:userId {
 
 POST:/:userId {
     parameters {
-        userName?:string,
-        password?:string,
-        address?:string,
-        phoneNumber?:string,
-        userState?:string,
+        user: {
+            userName?:string,
+            password?:string,
+            address?:string,
+            phoneNumber?:string,
+            userState?:string
+        }
     },
     response {
         message:string
@@ -110,12 +112,14 @@ GET:/:goodsId {
 
 POST:/:goodsId {
     parameters {
-        goodsName?:string,
-        price?:number,
-        picture?:string,
-        category?:string,
-        description?:string,
-        goodsState?:number
+        goods: {
+            goodsName?:string,
+            price?:number,
+            picture?:string,
+            category?:string,
+            description?:string,
+            goodsState?:number
+        }
     },
     response {
         message:string
@@ -154,7 +158,9 @@ GET:/:orderId {
 
 POST:/:orderId {
     parameters {
-        orderState:number
+        order: {
+            orderState:number
+        }
     },
     response {
         message:string
