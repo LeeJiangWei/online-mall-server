@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Goods = require('../models/goods').Goods;
 const checkLogin = require('../middlewares/check').checkLogin;
-const checkAdmin = require('../middlewares/check').checkAdmin;
 
 router.get('/', function(req, res, next) {
     Goods.all((goods, message) => {
@@ -13,12 +12,14 @@ router.get('/', function(req, res, next) {
     });
 });
 
-router.post('/add', function(req, res, next) {
+router.post('/add', checkLogin, function(req, res, next) {
     const goodsName = req.body.goodsName;
     const price = req.body.price;
     const picture = req.body.picture;
     const category = req.body.category;
     const description = req.body.description;
+    const userId = req.session.user.userId;
+    const date = new Date();
     if (goodsName && price) {
         const goodsState = 1;
         Goods.add(
@@ -28,7 +29,9 @@ router.post('/add', function(req, res, next) {
                 picture: picture,
                 category: category,
                 description: description,
-                goodsState: goodsState
+                goodsState: goodsState,
+                userId: userId,
+                postTime: date.toLocaleString()
             },
             message => {
                 res.json({
@@ -53,7 +56,7 @@ router.get('/:goodsId', function(req, res, next) {
     });
 });
 
-router.post('/:goodsId', function(req, res, next) {
+router.post('/:goodsId', checkLogin, function(req, res, next) {
     const goodsId = req.params.goodsId;
     let goods = {
         goodsName: req.body.goodsName,
