@@ -1,4 +1,4 @@
-const db = require('../util').db;
+const db = require('../utils/database').db;
 const ordersTable = db('orders');
 
 class Order {

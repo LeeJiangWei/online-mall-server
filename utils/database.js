@@ -9,12 +9,19 @@ const db = knex({
     useNullAsDefault: true
 });
 
-function initializeDatabase() {
+function init() {
     const sql = fs.readFileSync('./database.sql').toString();
-    db.schema.raw(sql);
+    db.schema.raw(sql).then(
+        value => {
+            console.log('Database initialization completed.');
+        },
+        reason => {
+            console.error(reason);
+        }
+    );
 }
 
 module.exports = {
-    initializeDatabase: initializeDatabase,
+    init: init,
     db: db
 };

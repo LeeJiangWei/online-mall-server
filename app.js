@@ -2,13 +2,13 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const util = require('./util');
+const database = require('./utils/database');
 const userRouter = require('./routes/user');
 const goodsRouter = require('./routes/goods');
 const orderRouter = require('./routes/order');
 const app = express();
 
-util.initializeDatabase();
+database.init();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
