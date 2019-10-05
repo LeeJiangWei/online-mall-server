@@ -122,7 +122,8 @@ POST:/:goodsId {
         picture:string,
         category:string,
         description:string,
-        goodsState:number
+        goodsState:number,
+        userId:integer
     },
     response {
         message:string

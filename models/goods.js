@@ -5,11 +5,11 @@ class Goods {
         db('goods')
             .select()
             .asCallback((error, goods) => {
+                let message = 'success';
                 if (error) {
-                    throw error;
-                } else {
-                    callback(goods);
+                    message = error.message;
                 }
+                callback(goods, message);
             });
     }
 
@@ -17,11 +17,11 @@ class Goods {
         db('goods')
             .where('goodsId', id)
             .asCallback((error, goods) => {
+                let message = 'success';
                 if (error) {
-                    throw error;
-                } else {
-                    callback(goods);
+                    message = error.message;
                 }
+                callback(goods, message);
             });
     }
 
@@ -31,9 +31,9 @@ class Goods {
             .update(goods)
             .asCallback(error => {
                 if (error) {
-                    throw error;
+                    callback(error.message);
                 } else {
-                    callback();
+                    callback('success');
                 }
             });
     }
@@ -43,9 +43,9 @@ class Goods {
             .insert(goods)
             .asCallback(error => {
                 if (error) {
-                    throw error;
+                    callback(error.message);
                 } else {
-                    callback();
+                    callback('success');
                 }
             });
     }
