@@ -1,9 +1,20 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
+    res.json('');
+});
+
+router.get('/:goodsId', function(req, res, next) {
+    res.json('');
+});
+
+router.post('/:goodsId', function(req, res, next) {
+    res.json('');
+});
+
+router.post('/add', function(req, res, next) {
+    res.json('');
 });
 
 module.exports = router;
