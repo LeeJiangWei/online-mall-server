@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
 const path = require('path');
+const serveStatic = require('serve-static');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const database = require('./utils/database');
@@ -23,6 +24,11 @@ app.use(
     })
 );
 app.use(flash());
+app.use(
+    serveStatic(path.join(__dirname, 'public'), {
+        maxAge: '10s'
+    })
+);
 app.use('/api/user', userRouter);
 app.use('/api/goods', goodsRouter);
 app.use('/api/order', orderRouter);
