@@ -158,6 +158,7 @@ GET:/:orderId {
     response {
         message:string,
         order:object,
+        buyer:object
     }
 }
 

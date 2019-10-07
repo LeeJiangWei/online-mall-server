@@ -51,9 +51,13 @@ router.get('/:goodsId', function(req, res, next) {
     const goodsId = req.params.goodsId;
     Goods.getById(goodsId, (goods, message1) => {
         User.getById(goods.userId, (seller, message2) => {
+            let message = message1 + ' ' + message2;
+            if (message1 === 'success' && message2 === 'success') {
+                message = 'success';
+            }
             let data = {
                 goods: goods,
-                message: message1 + '\n' + message2,
+                message: message,
                 seller: seller
             };
             delete data.seller.password;

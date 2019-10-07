@@ -48,8 +48,10 @@ router.get('/:orderId', checkLogin, function(req, res, next) {
             Order.getById(orderId, (order, message) => {
                 let data = {
                     order: order,
-                    message: message
+                    message: message,
+                    buyer: req.session.user
                 };
+                delete data.buyer.password;
                 if (order === undefined) delete data[order];
                 res.json(data);
             });
