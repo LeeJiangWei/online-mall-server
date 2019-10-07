@@ -46,10 +46,12 @@ router.get('/:orderId', checkLogin, function(req, res, next) {
     User.haveOrder(userId, orderId, yes => {
         if (isAdmin || yes) {
             Order.getById(orderId, (order, message) => {
-                res.json({
+                let data = {
                     order: order,
                     message: message
-                });
+                };
+                if (order === undefined) delete data[order];
+                res.json(data);
             });
         } else {
             res.json({

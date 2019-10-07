@@ -21,7 +21,11 @@ class Goods {
                 if (error) {
                     message = error.message;
                 }
-                callback(goods, message);
+                if (goods.length === 0) {
+                    callback(undefined, 'No such goods: ' + id);
+                } else {
+                    callback(goods[0], message);
+                }
             });
     }
 

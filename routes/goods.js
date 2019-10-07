@@ -50,10 +50,12 @@ router.post('/add', checkLogin, function(req, res, next) {
 router.get('/:goodsId', function(req, res, next) {
     const goodsId = req.params.goodsId;
     Goods.getById(goodsId, (goods, message) => {
-        res.json({
+        let data = {
             goods: goods,
             message: message
-        });
+        };
+        if (goods === undefined) delete data[goods];
+        res.json(data);
     });
 });
 

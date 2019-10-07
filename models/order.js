@@ -21,7 +21,11 @@ class Order {
                 if (error) {
                     message = error.message;
                 }
-                callback(order, message);
+                if (order.length === 0) {
+                    callback(undefined, 'No such order: ' + id);
+                } else {
+                    callback(order[0], message);
+                }
             });
     }
 
