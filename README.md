@@ -113,6 +113,7 @@ GET:/:goodsId {
     response {
         message:string,
         goods:object,
+        seller:object
     }
 }
 
