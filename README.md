@@ -1,6 +1,39 @@
 ## Description
 + Nothing to say now.
 
+## Database schemas
+### Users
+|Attribute|Type|Note|
+|---|---|---|
+|<u>userId</u>|integer|primary key|
+|userName|text|unique|
+|password|text||
+|address|text||
+|phoneNumber|text||
+|userState|integer|predefined value|
+
+### Goods
+|Attribute|Type|Note|
+|---|---|---|
+|<u>goodsId</u>|integer|primary key|
+|goodsName|text|unique|
+|price|real||
+|picture|text|picture url path|
+|category|text||
+|description|text||
+|goodsState|integer|predefined value|
+|postTime|text||
+|userId|integer|foreign key, refs its owner|
+
+### Orders
+|Attribute|Type|Note|
+|---|---|---|
+|<u>orderId</u>|integer|primary key|
+|orderState|integer|predefined value|
+|generateTime|text||
+|userId|integer|foreign key|
+|goodsId|integer|foreign key|
+
 ## Predefined values
 ### User state
 |Values|Description|
