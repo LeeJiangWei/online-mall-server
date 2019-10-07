@@ -51,7 +51,7 @@ GET:/:userId {
 
 POST:/:userId {
     parameters {
-        userId:integer
+        userId:number
         userName:string,
         password:string,
         address:string,
@@ -82,7 +82,8 @@ POST:/login {
     },
     response {
         message:string,
-        userState:number
+        userState:number,
+        userId:number
     }
 }
 

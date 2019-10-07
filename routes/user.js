@@ -50,11 +50,13 @@ router.post('/login', function(req, res, next) {
         if (valid) {
             req.session.user = user;
             res.json({
+                userId: user.userId,
                 userState: user.userState,
                 message: message
             });
         } else {
             res.json({
+                userId: user.userId,
                 userState: undefined,
                 message: message
             });
