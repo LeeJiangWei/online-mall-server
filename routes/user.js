@@ -56,7 +56,7 @@ router.post('/login', function(req, res, next) {
             });
         } else {
             res.json({
-                userId: user.userId,
+                userId: user ? user.userId : undefined,
                 userState: undefined,
                 message: message
             });
