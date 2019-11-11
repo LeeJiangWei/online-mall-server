@@ -49,24 +49,26 @@ router.post('/add', checkLogin, function(req, res, next) {
 
 router.get('/:goodsId', function(req, res, next) {
     const goodsId = req.params.goodsId;
-    Goods.getById(goodsId, (goods, message1) => {
-        User.getById(goods.userId, (seller, message2) => {
-            let message = message1 + ' ' + message2;
-            if (message1 === 'success' && message2 === 'success') {
-                message = 'success';
-            }
-            let data = {
-                goods: goods,
-                message: message,
-                seller: seller
-            };
-            delete data.seller.password;
-            if (goods === undefined) {
-                delete data.goods;
-                delete data.seller;
-            }
-            res.json(data);
-        });
+    Goods.getById(goodsId, (goods, message) => {
+        if (goods) {
+            User.getById(goods.userId, (seller, message) => {
+                let data = {
+                    goods,
+                    message,
+                    seller: seller
+                };
+                delete data.seller.password;
+                if (goods === undefined) {
+                    delete data.goods;
+                    delete data.seller;
+                }
+                res.json(data);
+            });
+        } else {
+            res.json({
+                message
+            });
+        }
     });
 });
 
