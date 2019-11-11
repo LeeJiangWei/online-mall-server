@@ -21,7 +21,7 @@ router.post('/add', checkLogin, function(req, res, next) {
     const description = req.body.description;
     const userId = req.session.user.userId;
     const date = new Date();
-    if (goodsName && price) {
+    if (goodsName && price !== undefined) {
         const goodsState = 1;
         Goods.add(
             {
@@ -83,7 +83,7 @@ router.post('/:goodsId', checkLogin, function(req, res, next) {
         description: req.body.description,
         goodsState: req.body.goodsState
     };
-    if (goods.goodsName && goods.price) {
+    if (goods.goodsName && goods.price !== undefined) {
         const isAdmin = req.session.user.userState === 5;
         User.haveGoods(userId, goodsId, yes => {
             if (isAdmin || yes) {
