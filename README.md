@@ -212,4 +212,15 @@ POST:/add {
         message:string
     }
 }
+
+POST:/search {
+    parameters {
+        keyword:string,
+        orderState: number // if orderState is undefined, then search all states
+    },
+    response {
+        message:string,
+        orders:array
+    }
+}
 ```

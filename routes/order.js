@@ -4,8 +4,9 @@ const Order = require('../models/order').Order;
 const User = require('../models/user').User;
 const checkLogin = require('../middlewares/check').checkLogin;
 
-router.get('/', function(req, res, next) {
-    Order.all((orders, message) => {
+router.get('/', checkLogin, function(req, res, next) {
+    const userId = req.session.user.userId;
+    Order.belongToUser(userId, (orders, message) => {
         res.json({
             message: message,
             orders: orders
@@ -89,6 +90,18 @@ router.post('/:orderId', checkLogin, function(req, res, next) {
             message: 'Invalid parameters.'
         });
     }
+});
+
+router.post('/search', checkLogin, function(req, res, next) {
+    const userId = req.session.user.userId;
+    const orderState = req.body.orderState;
+    const keyword = req.body.keyword;
+    Order.search(userId, keyword, orderState, (message, orders) => {
+        res.json({
+            message: message,
+            orders: orders
+        });
+    });
 });
 
 module.exports = router;
