@@ -3,10 +3,21 @@ const router = express.Router();
 const Order = require('../models/order').Order;
 const User = require('../models/user').User;
 const checkLogin = require('../middlewares/check').checkLogin;
+const checkAdmin = require('../middlewares/check').checkAdmin;
 
 router.get('/', checkLogin, function(req, res, next) {
     const userId = req.session.user.userId;
     Order.belongToUser(userId, (orders, message) => {
+        res.json({
+            message: message,
+            orders: orders
+        });
+    });
+});
+
+router.get('/all', checkAdmin, function(req, res, next) {
+    const userId = req.session.user.userId;
+    Order.all((orders, message) => {
         res.json({
             message: message,
             orders: orders

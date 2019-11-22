@@ -209,6 +209,13 @@ GET:/ {
     }
 }
 
+GET:/all {
+    response {
+        message:string,
+        orders:array {buyerId, buyerName, sellerId, sellerName}
+    }
+}
+
 GET:/:orderId {
     response {
         message:string,

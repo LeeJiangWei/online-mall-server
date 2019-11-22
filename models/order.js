@@ -3,7 +3,23 @@ const db = require('../utils/database').db;
 class Order {
     static all(callback) {
         db('orders')
+            .select([
+                'orderId',
+                'orderState',
+                'generateTime',
+                'orders.userId as buyerId',
+                'goods.userId as sellerId',
+                'buyer.userName as buyerName',
+                'seller.userName as sellerName',
+                'orders.goodsId',
+                'goodsName',
+                'category',
+                'picture',
+                'price'
+            ])
             .innerJoin('goods', 'orders.goodsId', 'goods.goodsId')
+            .innerJoin('users as buyer', 'buyer.userId', 'buyerId')
+            .innerJoin('users as seller', 'seller.userId', 'sellerId')
             .asCallback((error, orders) => {
                 let message = 'success';
                 if (error) {
