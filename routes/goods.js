@@ -13,6 +13,21 @@ router.get('/', function(req, res, next) {
     });
 });
 
+router.post('/search', function(req, res, next) {
+    const goodsState = req.body.goodsState;
+    const keyword = req.body.keyword;
+    if (keyword) {
+        Goods.search(keyword, goodsState, (goods, message) => {
+            res.json({
+                message: message,
+                goods: goods
+            });
+        });
+    } else {
+        res.redirect('/api/goods/');
+    }
+});
+
 router.post('/add', checkLogin, function(req, res, next) {
     const goodsName = req.body.goodsName;
     const price = req.body.price;

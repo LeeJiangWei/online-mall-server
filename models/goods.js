@@ -29,6 +29,35 @@ class Goods {
             });
     }
 
+    static search(keyword, goodsState, callback) {
+        let goodsStates = [];
+        if (
+            goodsState === undefined ||
+            goodsState === -1 ||
+            goodsState === ''
+        ) {
+            goodsStates = [0, 1, 2];
+        } else {
+            goodsStates.push(goodsState);
+        }
+        db('goods')
+            .whereIn('goodsState', goodsStates)
+            .whereRaw('LOWER(goodsName) LIKE ?', `%${keyword.toLowerCase()}%`)
+            .orWhereRaw(
+                'LOWER(description) LIKE ?',
+                `%${keyword.toLowerCase()}%`
+            )
+            .orWhereRaw('LOWER(category) LIKE ?', `%${keyword.toLowerCase()}%`)
+            .asCallback((error, goods) => {
+                let message = 'success';
+                if (error) {
+                    console.error(error);
+                    message = error.message;
+                }
+                callback(goods, message);
+            });
+    }
+
     static updateById(id, goods, callback) {
         db('goods')
             .where('goodsId', id)

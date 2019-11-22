@@ -40,6 +40,18 @@ router.post('/add', checkLogin, function(req, res, next) {
     }
 });
 
+router.post('/search', checkLogin, function(req, res, next) {
+    const userId = req.session.user.userId;
+    const orderState = req.body.orderState;
+    const keyword = req.body.keyword;
+    Order.search(userId, keyword, orderState, (orders, message) => {
+        res.json({
+            message: message,
+            orders: orders
+        });
+    });
+});
+
 router.get('/:orderId', checkLogin, function(req, res, next) {
     const orderId = req.params.orderId;
     const userId = req.session.user.userId;
@@ -90,18 +102,6 @@ router.post('/:orderId', checkLogin, function(req, res, next) {
             message: 'Invalid parameters.'
         });
     }
-});
-
-router.post('/search', checkLogin, function(req, res, next) {
-    const userId = req.session.user.userId;
-    const orderState = req.body.orderState;
-    const keyword = req.body.keyword;
-    Order.search(userId, keyword, orderState, (message, orders) => {
-        res.json({
-            message: message,
-            orders: orders
-        });
-    });
 });
 
 module.exports = router;

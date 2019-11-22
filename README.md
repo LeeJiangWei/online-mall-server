@@ -142,6 +142,17 @@ GET:/ {
     }
 }
 
+POST:/search {
+    parameters {
+        keyword:string,
+        goodsState: number // if orderState is undefined, then search all states
+    },
+    response {
+        message:string,
+        goods:array
+    }
+}
+
 GET:/:goodsId {
     response {
         message:string,

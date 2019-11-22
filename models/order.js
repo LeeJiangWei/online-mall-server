@@ -69,16 +69,19 @@ class Order {
 
     static search(userId, keyword, orderState, callback) {
         let orderStates = [];
-        if (orderState === undefined) {
+        if (orderState === undefined || orderState === -1) {
             orderStates = [0, 1, 2, 3];
         } else {
             orderStates.push(orderState);
         }
         db('orders')
-            .where('userId', userId)
-            .whereIn('orderState', orderStates)
             .innerJoin('goods', 'orders.goodsId', 'goods.goodsId')
-            .whereRaw('LOWER(goods.name) LIKE ?', `%${keyword.toLowerCase()}%`)
+            .where('orders.userId', userId)
+            .whereIn('orderState', orderStates)
+            .whereRaw(
+                'LOWER(goods.goodsName) LIKE ?',
+                `%${keyword.toLowerCase()}%`
+            )
             .orWhereRaw(
                 'LOWER(goods.description) LIKE ?',
                 `%${keyword.toLowerCase()}%`
