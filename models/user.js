@@ -99,6 +99,31 @@ class User {
                 }
             });
     }
+
+    static search(keyword, userState, callback) {
+        let usersStates = [];
+        if (userState === undefined || userState === -1 || userState === '') {
+            usersStates = [0, 1, 5];
+        } else {
+            usersStates.push(userState);
+        }
+        db('users')
+            .whereIn('userState', usersStates)
+            .whereRaw('LOWER(userName) LIKE ?', `%${keyword.toLowerCase()}%`)
+            .orWhereRaw('LOWER(address) LIKE ?', `%${keyword.toLowerCase()}%`)
+            .orWhereRaw(
+                'LOWER(phoneNumber) LIKE ?',
+                `%${keyword.toLowerCase()}%`
+            )
+            .asCallback((error, users) => {
+                let message = 'success';
+                if (error) {
+                    console.error(error);
+                    message = error.message;
+                }
+                callback(users, message);
+            });
+    }
 }
 
 module.exports.User = User;

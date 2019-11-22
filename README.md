@@ -73,6 +73,17 @@ GET:/ {
     }
 }
 
+POST:/search {
+    parameters {
+        keyword:string,
+        userState: number // if userState is undefined, then search all states
+    },
+    response {
+        message:string,
+        users:array
+    }
+}
+
 GET:/:userId {
     response {
         message:string,

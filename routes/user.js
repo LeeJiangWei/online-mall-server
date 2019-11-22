@@ -15,6 +15,21 @@ router.get('/', checkAdmin, function(req, res, next) {
     });
 });
 
+router.post('/search', checkAdmin, function(req, res, next) {
+    const userState = req.body.userState;
+    const keyword = req.body.keyword;
+    if (keyword) {
+        User.search(keyword, userState, (users, message) => {
+            res.json({
+                message: message,
+                users: users
+            });
+        });
+    } else {
+        res.redirect('/api/user/');
+    }
+});
+
 router.post('/register', function(req, res, next) {
     const userName = req.body.userName;
     const password = req.body.password;
