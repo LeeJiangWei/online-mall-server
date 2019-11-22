@@ -3,7 +3,7 @@ const db = require('../utils/database').db;
 class Order {
     static all(callback) {
         db('orders')
-            .select()
+            .innerJoin('goods', 'orders.goodsId', 'goods.goodsId')
             .asCallback((error, orders) => {
                 let message = 'success';
                 if (error) {
@@ -56,8 +56,19 @@ class Order {
 
     static belongToUser(userId, callback) {
         db('orders')
-            .select()
-            .where('userId', userId)
+            .select([
+                'orderId',
+                'orderState',
+                'generateTime',
+                'orders.userId',
+                'orders.goodsId',
+                'goodsName',
+                'category',
+                'picture',
+                'price'
+            ])
+            .innerJoin('goods', 'orders.goodsId', 'goods.goodsId')
+            .where('orders.userId', userId)
             .asCallback((error, orders) => {
                 let message = 'success';
                 if (error) {
