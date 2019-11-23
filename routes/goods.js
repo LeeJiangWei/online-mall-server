@@ -15,8 +15,9 @@ router.get('/', function(req, res, next) {
 
 router.post('/search', function(req, res, next) {
     const goodsState = Number(req.body.goodsState);
-    const keyword = req.body.keyword;
+    let keyword = req.body.keyword;
     if (keyword) {
+        keyword = keyword.trim();
         Goods.search(keyword, goodsState, (goods, message) => {
             res.json({
                 message: message,

@@ -64,7 +64,8 @@ router.post('/add', checkLogin, function(req, res, next) {
 router.post('/search', checkLogin, function(req, res, next) {
     const userId = req.session.user.userId;
     const orderState = Number(req.body.orderState);
-    const keyword = req.body.keyword;
+    let keyword = req.body.keyword;
+    keyword = keyword.trim();
     let asBuyer = true;
     if (req.body.asBuyer === 'false' || req.body.asBuyer === false)
         asBuyer = false;
