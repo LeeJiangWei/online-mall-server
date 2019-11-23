@@ -25,6 +25,16 @@ router.get('/all', checkAdmin, function(req, res, next) {
     });
 });
 
+router.get('/allAsSeller', checkLogin, function(req, res, next) {
+    const userId = req.session.user.userId;
+    Order.allAsSeller(userId, (orders, message) => {
+        res.json({
+            message: message,
+            orders: orders
+        });
+    });
+});
+
 router.post('/add', checkLogin, function(req, res, next) {
     const goodsId = req.body.goodsId;
     const userId = req.session.user.userId;

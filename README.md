@@ -209,7 +209,14 @@ GET:/ {
     }
 }
 
-GET:/all {
+GET:/all {  // Get user's all orders as buyer
+    response {
+        message:string,
+        orders:array {buyerId, buyerName, sellerId, sellerName}
+    }
+}
+
+GET:/allAsSeller {  // Get user's all orders as seller; notice the seller cannot modify order and view order detail
     response {
         message:string,
         orders:array {buyerId, buyerName, sellerId, sellerName}
