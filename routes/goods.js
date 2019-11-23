@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/search', function(req, res, next) {
-    const goodsState = req.body.goodsState;
+    const goodsState = Number(req.body.goodsState);
     const keyword = req.body.keyword;
     if (keyword) {
         Goods.search(keyword, goodsState, (goods, message) => {

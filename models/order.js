@@ -123,7 +123,7 @@ class Order {
             });
     }
 
-    static search(userId, keyword, orderState, callback) {
+    static search(userId, keyword, orderState, asBuyer, callback) {
         let orderStates = [];
         if (orderState === undefined || orderState === -1) {
             orderStates = [0, 1, 2, 3];
@@ -131,25 +131,44 @@ class Order {
             orderStates.push(orderState);
         }
         db('orders')
+            .select([
+                'orderId',
+                'orderState',
+                'generateTime',
+                'orders.userId as buyerId',
+                'goods.userId as sellerId',
+                'buyer.userName as buyerName',
+                'seller.userName as sellerName',
+                'orders.goodsId',
+                'goodsName',
+                'category',
+                'picture',
+                'price'
+            ])
             .innerJoin('goods', 'orders.goodsId', 'goods.goodsId')
-            .where('orders.userId', userId)
+            .innerJoin('users as buyer', 'buyer.userId', 'buyerId')
+            .innerJoin('users as seller', 'seller.userId', 'sellerId')
             .whereIn('orderState', orderStates)
-            .whereRaw(
-                'LOWER(goods.goodsName) LIKE ?',
-                `%${keyword.toLowerCase()}%`
-            )
-            .orWhereRaw(
-                'LOWER(goods.description) LIKE ?',
-                `%${keyword.toLowerCase()}%`
-            )
-            .orWhereRaw(
-                'LOWER(orders.generateTime) LIKE ?',
-                `%${keyword.toLowerCase()}%`
-            )
-            .orWhereRaw(
-                'LOWER(goods.category) LIKE ?',
-                `%${keyword.toLowerCase()}%`
-            )
+            .andWhere(asBuyer ? 'orders.userId' : 'goods.userId', userId)
+            .andWhere(builder => {
+                builder
+                    .whereRaw(
+                        'LOWER(goods.goodsName) LIKE ?',
+                        `%${keyword.toLowerCase()}%`
+                    )
+                    .orWhereRaw(
+                        'LOWER(goods.description) LIKE ?',
+                        `%${keyword.toLowerCase()}%`
+                    )
+                    .orWhereRaw(
+                        'LOWER(orders.generateTime) LIKE ?',
+                        `%${keyword.toLowerCase()}%`
+                    )
+                    .orWhereRaw(
+                        'LOWER(goods.category) LIKE ?',
+                        `%${keyword.toLowerCase()}%`
+                    );
+            })
             .asCallback((error, orders) => {
                 let message = 'success';
                 if (error) {

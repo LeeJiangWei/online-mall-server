@@ -16,7 +16,7 @@ router.get('/', checkAdmin, function(req, res, next) {
 });
 
 router.post('/search', checkAdmin, function(req, res, next) {
-    const userState = req.body.userState;
+    const userState = Number(req.body.userState);
     const keyword = req.body.keyword;
     if (keyword) {
         User.search(keyword, userState, (users, message) => {

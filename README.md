@@ -252,7 +252,8 @@ POST:/add {
 POST:/search {
     parameters {
         keyword:string,
-        orderState: number // if orderState is undefined, then search all states
+        orderState: number, // if orderState is undefined, then search all states
+        asBuyer: boolean
     },
     response {
         message:string,
