@@ -42,12 +42,21 @@ class Goods {
         }
         db('goods')
             .whereIn('goodsState', goodsStates)
-            .whereRaw('LOWER(goodsName) LIKE ?', `%${keyword.toLowerCase()}%`)
-            .orWhereRaw(
-                'LOWER(description) LIKE ?',
-                `%${keyword.toLowerCase()}%`
-            )
-            .orWhereRaw('LOWER(category) LIKE ?', `%${keyword.toLowerCase()}%`)
+            .andWhere(builder => {
+                builder
+                    .whereRaw(
+                        'LOWER(goodsName) LIKE ?',
+                        `%${keyword.toLowerCase()}%`
+                    )
+                    .orWhereRaw(
+                        'LOWER(description) LIKE ?',
+                        `%${keyword.toLowerCase()}%`
+                    )
+                    .orWhereRaw(
+                        'LOWER(category) LIKE ?',
+                        `%${keyword.toLowerCase()}%`
+                    );
+            })
             .asCallback((error, goods) => {
                 let message = 'success';
                 if (error) {

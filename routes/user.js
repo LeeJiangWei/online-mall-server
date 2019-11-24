@@ -18,17 +18,13 @@ router.get('/', checkAdmin, function(req, res, next) {
 router.post('/search', checkAdmin, function(req, res, next) {
     const userState = Number(req.body.userState);
     let keyword = req.body.keyword;
-    if (keyword) {
-        keyword = keyword.trim();
-        User.search(keyword, userState, (users, message) => {
-            res.json({
-                message: message,
-                users: users
-            });
+    keyword = keyword ? keyword.trim() : '';
+    User.search(keyword, userState, (users, message) => {
+        res.json({
+            message: message,
+            users: users
         });
-    } else {
-        res.redirect('/api/user/');
-    }
+    });
 });
 
 router.post('/register', function(req, res, next) {

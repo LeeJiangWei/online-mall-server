@@ -109,12 +109,22 @@ class User {
         }
         db('users')
             .whereIn('userState', usersStates)
-            .whereRaw('LOWER(userName) LIKE ?', `%${keyword.toLowerCase()}%`)
-            .orWhereRaw('LOWER(address) LIKE ?', `%${keyword.toLowerCase()}%`)
-            .orWhereRaw(
-                'LOWER(phoneNumber) LIKE ?',
-                `%${keyword.toLowerCase()}%`
-            )
+            .andWhere(builder => {
+                builder
+                    .whereRaw(
+                        'LOWER(userName) LIKE ?',
+                        `%${keyword.toLowerCase()}%`
+                    )
+                    .orWhereRaw(
+                        'LOWER(address) LIKE ?',
+                        `%${keyword.toLowerCase()}%`
+                    )
+                    .orWhereRaw(
+                        'LOWER(phoneNumber) LIKE ?',
+                        `%${keyword.toLowerCase()}%`
+                    );
+            })
+
             .asCallback((error, users) => {
                 let message = 'success';
                 if (error) {

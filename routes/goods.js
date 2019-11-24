@@ -16,17 +16,13 @@ router.get('/', function(req, res, next) {
 router.post('/search', function(req, res, next) {
     const goodsState = Number(req.body.goodsState);
     let keyword = req.body.keyword;
-    if (keyword) {
-        keyword = keyword.trim();
-        Goods.search(keyword, goodsState, (goods, message) => {
-            res.json({
-                message: message,
-                goods: goods
-            });
+    keyword = keyword ? keyword.trim() : '';
+    Goods.search(keyword, goodsState, (goods, message) => {
+        res.json({
+            message: message,
+            goods: goods
         });
-    } else {
-        res.redirect('/api/goods/');
-    }
+    });
 });
 
 router.post('/add', checkLogin, function(req, res, next) {
