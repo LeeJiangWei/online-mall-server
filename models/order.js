@@ -94,6 +94,14 @@ class Order {
                 if (error) {
                     callback(error.message);
                 } else {
+                    db('goods')
+                        .update('goodsState', '2')
+                        .where('goodsId', order.goodsId)
+                        .asCallback(error => {
+                            if (error) {
+                                console.error(error.message);
+                            }
+                        });
                     callback('success');
                 }
             });
