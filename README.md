@@ -215,6 +215,12 @@ GET:/ {
     }
 }
 
+DELETE:/:orderId {
+    response {
+        message:string
+    }
+}
+
 GET:/all {  // Get user's all orders as buyer
     response {
         message:string,

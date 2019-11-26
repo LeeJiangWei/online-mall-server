@@ -15,6 +15,31 @@ router.get('/', checkLogin, function(req, res, next) {
     });
 });
 
+router.delete('/:orderId', checkLogin, function(req, res, next) {
+    const userId = req.session.user.userId;
+    const orderId = req.params.orderId;
+    if (orderId !== undefined) {
+        const isAdmin = req.session.user.userState === 5;
+        User.haveOrder(userId, orderId, yes => {
+            if (isAdmin || yes) {
+                Order.delete(userId, message => {
+                    res.json({
+                        message: message
+                    });
+                });
+            } else {
+                res.json({
+                    message: 'Permission denied.'
+                });
+            }
+        });
+    } else {
+        res.json({
+            message: 'Invalid parameters.'
+        });
+    }
+});
+
 router.get('/all', checkAdmin, function(req, res, next) {
     const userId = req.session.user.userId;
     Order.all((orders, message) => {

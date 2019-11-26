@@ -29,6 +29,19 @@ class Order {
             });
     }
 
+    static delete(id, callback) {
+        db('orders')
+            .where('orderId', id)
+            .del()
+            .asCallback(error => {
+                if (error) {
+                    callback(error.message);
+                } else {
+                    callback('success');
+                }
+            });
+    }
+
     static allAsSeller(sellerId, callback) {
         db('orders')
             .select([
