@@ -1,3 +1,4 @@
+PRAGMA foreign_keys = ON;
 create table if not exists users(
 	userId integer,
 	userName text unique,
@@ -19,7 +20,7 @@ create table if not exists goods(
 	postTime text,
 	userId integer not null,
 	primary key (goodsId),
-	foreign key (userId) references users
+	foreign key (userId) references users on update cascade on delete cascade
 );
 
 create table if not exists orders(
@@ -29,6 +30,6 @@ create table if not exists orders(
 	userId integer not null,
 	goodsId integer not null,
 	primary key (orderId),
-	foreign key (userId) references users,
-	foreign key (goodsId) references goods
+	foreign key (userId) references users on update cascade on delete cascade,
+	foreign key (goodsId) references goods on update cascade on delete cascade
 );

@@ -120,4 +120,29 @@ router.post('/:goodsId', checkLogin, function(req, res, next) {
     }
 });
 
+router.delete('/:goodsId', checkLogin, function(req, res, next) {
+    const userId = req.session.user.userId;
+    const goodsId = req.params.goodsId;
+    if (goodsId !== undefined) {
+        const isAdmin = req.session.user.userState === 5;
+        User.haveGoods(userId, goodsId, yes => {
+            if (isAdmin || yes) {
+                Goods.delete(goodsId, message => {
+                    res.json({
+                        message: message
+                    });
+                });
+            } else {
+                res.json({
+                    message: 'Permission denied.'
+                });
+            }
+        });
+    } else {
+        res.json({
+            message: 'Invalid parameters.'
+        });
+    }
+});
+
 module.exports = router;

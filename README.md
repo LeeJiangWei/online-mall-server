@@ -153,6 +153,12 @@ GET:/ {
     }
 }
 
+DELETE:/:goodsId {
+    response {
+        message:string
+    }
+}
+
 POST:/search {
     parameters {
         keyword:string,

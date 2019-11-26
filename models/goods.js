@@ -80,6 +80,19 @@ class Goods {
             });
     }
 
+    static delete(id, callback) {
+        db('goods')
+            .where('goodsId', id)
+            .del()
+            .asCallback(error => {
+                if (error) {
+                    callback(error.message);
+                } else {
+                    callback('success');
+                }
+            });
+    }
+
     static add(goods, callback) {
         db('goods')
             .insert(goods)
