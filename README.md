@@ -73,6 +73,12 @@ GET:/ {
     }
 }
 
+DELETE:/:userId {
+    response {
+        message:string
+    }
+}
+
 POST:/search {
     parameters {
         keyword:string,

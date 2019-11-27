@@ -100,6 +100,16 @@ class User {
             });
     }
 
+    static delete(id, callback) {
+        db.raw(`delete from users where userId = ?`, [id]).asCallback(error => {
+            if (error) {
+                callback(error.message);
+            } else {
+                callback('success');
+            }
+        });
+    }
+
     static search(keyword, userState, callback) {
         let usersStates = [];
         if (userState === undefined || userState === -1 || userState === '') {

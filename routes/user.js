@@ -15,6 +15,21 @@ router.get('/', checkAdmin, function(req, res, next) {
     });
 });
 
+router.delete('/:userId', checkAdmin, function(req, res, next) {
+    const userId = req.params.userId;
+    if (userId !== undefined) {
+        User.delete(userId, message => {
+            res.json({
+                message: message
+            });
+        });
+    } else {
+        res.json({
+            message: 'Invalid parameters.'
+        });
+    }
+});
+
 router.post('/search', checkAdmin, function(req, res, next) {
     const userState = Number(req.body.userState);
     let keyword = req.body.keyword;

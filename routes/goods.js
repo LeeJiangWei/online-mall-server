@@ -69,7 +69,7 @@ router.get('/:goodsId', function(req, res, next) {
                     message,
                     seller: seller
                 };
-                delete data.seller.password;
+                if (data.seller) delete data.seller.password;
                 if (goods === undefined) {
                     delete data.goods;
                     delete data.seller;
@@ -99,9 +99,6 @@ router.post('/:goodsId', checkLogin, function(req, res, next) {
         const isAdmin = req.session.user.userState === 5;
         User.haveGoods(userId, goodsId, yes => {
             if (isAdmin || yes) {
-                if (!isAdmin) {
-                    delete goods.goodsState;
-                }
                 Goods.updateById(goodsId, goods, message => {
                     res.json({
                         message: message
